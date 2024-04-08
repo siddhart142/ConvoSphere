@@ -18,5 +18,8 @@ app.use(express.urlencoded({extended : true, limit : "16kb"}))
 app.use(express.static("public"))
 app.use(cookieParser())
 
+import chatRouter from "./Routes/chat.route.js"
+
+app.use("/api/v1/chats",chatRouter)
 
 export default app
