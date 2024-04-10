@@ -22,4 +22,8 @@ import chatRouter from "./Routes/chat.route.js"
 
 app.use("/api/v1/chats",chatRouter)
 
+
+import UserRouter from "./Routes/user.route.js"
+app.use("/api/v1/users",UserRouter)
+
 export default app
