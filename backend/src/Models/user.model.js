@@ -8,7 +8,8 @@ const UserSchema = new Schema({
     email: {type: String, required: true, trim: true, unique: true},
     password: {type: String, required: true},
     bio: {type:String, required: true},
-    avatar: {type: String, required: true, default: "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"}
+    avatar: {type: String, required: true, default: "https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"},
+    // accessToken : {type : String}
 },{
     timestamps: true
 })
@@ -18,17 +19,23 @@ const UserSchema = new Schema({
 
 UserSchema.pre("save", async function(next){
     if(!this.isModified("password")) return next();
-
     this.password = await bcrypt.hash(this.password,10)
     next()
 })
 
 UserSchema.methods.isPasswordCorrect = async function(password){
-    return await bcrypt.compare(password,this.password)
+    console.log("password",password)
+    try {
+        console.log(password,this.password)
+        return await bcrypt.compare(password,this.password)
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 
 UserSchema.methods.generateAccessToken = function(){
+    console.log("called")
     try{
         return jwt.sign(
             {

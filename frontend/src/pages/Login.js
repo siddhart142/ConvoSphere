@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import axios from "axios";
 import { addUser } from '../utlis/userSlice';
@@ -16,7 +16,6 @@ const Login = () => {
     const toggleLogin = () => {
         setIsLogin(!isLogin);
     };
-
     const { register, formState: { errors }, handleSubmit } = useForm();
 
     const onSignUp = async (formData) => {
@@ -35,7 +34,8 @@ const Login = () => {
         try {
             const response = await axios.post("http://localhost:8000/api/v1/users/login", formData);
             console.log(response);
-            dispatch(addUser(response?.data?.data))
+            dispatch(addUser(response?.data?.data?.user))
+            document.cookie =`accessToken= ${response?.data?.data?.accessToken}`
             navigate("/");
         } catch (error) {
             console.log(error);

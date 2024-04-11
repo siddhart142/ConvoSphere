@@ -67,23 +67,26 @@ const login = asyncHandler(async (req, res) => {
             throw new ApiError(404, "No Such User Found");
         }
 
-        console.log(user)
+        
         const isValidUser = await user.isPasswordCorrect(password)
-
+       
         if (!isValidUser) {
             throw new ApiError(401, "Invalid user credentials");
         }
 
         const accessToken = await user.generateAccessToken()
-
+       
+        console.log(accessToken)
         const options = {
             httpOnly: true,
             secure: true,
         }
 
+        const loggedInUser = await User.findById(user._id).select("-password")
+
         res.status(200)
         .cookie("accessToken",accessToken,options)
-        .json(new ApiResponse(200, user, "Successfully Logged In"));
+        .json(new ApiResponse(200, {loggedInUser,accessToken}, "Successfully Logged In"));
     } catch (error) {
         console.error("Error during login:", error.message);
         throw new ApiError(401, error.message);
@@ -92,7 +95,7 @@ const login = asyncHandler(async (req, res) => {
 
 // api/user?search=sid
 const allUsers = asyncHandler(async(req,res)=>{
-
+    console.log("all",req.query)
     const keyword = req.query.search ? {
         $or: [
             {name : {$regex : req.query.search, $options: "i"}},
@@ -103,8 +106,11 @@ const allUsers = asyncHandler(async(req,res)=>{
     // console.log(keyword)
 
     const users = await User.find(keyword).find({_id: {$ne : req.user._id}})
-
-    res.send(users)
+    console.log(users)
+    res.status(200)
+    .json(
+        new ApiResponse(200,users,"Users Fetche")
+    )
 })
 
 export {

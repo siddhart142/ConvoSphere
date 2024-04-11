@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { register, login, allUsers } from "../Controllers/user.controller.js";
 import { upload } from "../MiddleWares/multer.middleware.js";
-
+import {protectedRoute} from "../MiddleWares/auth.middleware.js"
 const router = Router();
 
 router.route("/register").post(upload.fields([
@@ -12,5 +12,5 @@ router.route("/register").post(upload.fields([
 ]),register)
 router.route("/login").post(login)
 
-
+router.route("/").get(protectedRoute, allUsers);
 export default router
