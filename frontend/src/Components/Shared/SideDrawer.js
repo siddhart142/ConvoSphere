@@ -32,14 +32,18 @@ import { Input } from '@chakra-ui/react'
 import axios from "axios"
 import ChatLoading from '../layout/ChatLoading';
 import UserListItem from '../layout/UserListItem';
+import { addChat } from '../../utlis/chatLIstSlice';
 const SideDrawer = () => {
 
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [search,setSearch] = useState("")
     const [searchResult, setSearchResult] = useState([])
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
     const [selectedChat,setSelectedChat] = useState({})
+    const chatList = useSelector((store)=>store.chatList)
+
     const toast = useToast()
     const user = useSelector((store) => store.user)
     const dispatch = useDispatch()
@@ -93,9 +97,11 @@ const SideDrawer = () => {
             const response = await axios.post("http://localhost:8000/api/v1/chats", {"userId": user_id}, {
                 withCredentials: true
               });
-    
-              setSelectedChat(response.data.data)
+              console.log("c",response.data)
+              setSelectedChat(response.data)
               setLoadingChat(false)
+              if(!chatList.find((c)=> c._id==response.data.data._id)) dispatch(addChat([response.data,...chatList]))
+
         } catch (error) {
             toast({
                 title : "Error Fetching the Chat",

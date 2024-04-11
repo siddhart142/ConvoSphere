@@ -15,6 +15,7 @@ const NotFound = lazy(()=> import("./pages/NotFound") )
 
 const App = () => {
   const user = useSelector((store) => store.user)
+  // const user= 
   console.log("app",user)
   return (
         <BrowserRouter>

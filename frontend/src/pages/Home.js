@@ -5,10 +5,11 @@ import {Box} from "@chakra-ui/layout"
 import SideDrawer from '../Components/Shared/SideDrawer';
 import MyChats from '../Components/Shared/MyChats';
 import ChatBox from '../Components/Shared/ChatBox';
+import {useSelector} from "react-redux"
 
 const Home = () => {
 
-const user = true
+const user = useSelector((store)=>store.user)
   
 
 

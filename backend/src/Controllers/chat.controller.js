@@ -18,6 +18,7 @@ import { asyncHandler } from "../utlis/asyncHandler.js"
 const accessChat = asyncHandler(async(req,res)=>{
 
     const {userId} = req.body;
+    console.log(req.user._id)
 
     if(!userId){
         throw new ApiError(404,"UserId Not provided")
@@ -26,7 +27,7 @@ const accessChat = asyncHandler(async(req,res)=>{
     let isChat = await Chat.find({
         isGroupChat : false,
         $and : [
-            {users: {$elemMatch : {$eq : req.user_id}}},
+            {users: {$elemMatch : {$eq : req.user._id}}},
             {users: {$elemMatch : {$eq : userId}}},
         ]
     }).populate("users","-password").populate("latestMsg")
@@ -35,10 +36,12 @@ const accessChat = asyncHandler(async(req,res)=>{
         path : "latestMsg.sender",
         select: "name pic email",
     })
-
+    // console.log("chats acces",isChat)
+    
     if(isChat.length > 0)
     {
         res.send(isChat[0])
+        return
     }else{
         var chatData ={
             ChatName : "sender",
@@ -63,8 +66,9 @@ const accessChat = asyncHandler(async(req,res)=>{
 const fetchChats = asyncHandler(async(req,res)=>{
 
     const userId = req.user._id
+    console.log("fetch",userId)
     try{
-        const chats = await Chat.find({users:{$elemMatch:{userId}}})
+        await Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
         .populate("users","-password")
         .populate("groupAdmin","-password")
         .populate("latestMsg")
@@ -74,8 +78,14 @@ const fetchChats = asyncHandler(async(req,res)=>{
                 path : "latestMsg.sender",
                 select : "name email pic"
             })
+
+            console.log("\n\nchats",chats)
+
+            res.status(200).send(results)
+            console.log("results",results)
         })
-        res.status(200).send(results)
+        
+        
         
     }catch(error)
     {
