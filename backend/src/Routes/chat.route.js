@@ -1,15 +1,14 @@
 import { Router } from "express";
-import { getChats } from "../Controllers/chat.controller.js";
-
+import { accessChat,fetchChats,createGroupChat, renameGroup, removeFromGroup, addToGroup  } from "../Controllers/chat.controller.js";
+import {protectedRoute} from "../MiddleWares/auth.middleware.js"
 const router = Router()
 
 // router.route("/chats").get(getChats)
 
-// router.route('/').post(accessChat)
-// router.route("/").get(fetchChats)
-// routter.route("/group").post(createGroupChat)
-// router.route("/rename").put(renameGroup)
-// router.route("/removeGroup").put(removeFromGroup)
-// router.route("/add").put(addToGroup)
+router.route('/').post(protectedRoute, accessChat)
+router.route("/rename").put(protectedRoute,fetchChats)
+router.route("/removeGroup").put(protectedRoute,removeFromGroup)
+router.route("/add").put(protectedRoute,addToGroup)
+router.route("/group").post(protectedRoute,createGroupChat)
 
 export default router

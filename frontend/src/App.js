@@ -1,6 +1,7 @@
 import React, {lazy} from 'react'
 import {BrowserRouter, Routes, Route} from "react-router-dom"
 import Protected from './Components/auth/Protected'
+import { useSelector } from 'react-redux';
 
 // import Home from './pages/Home'
 
@@ -10,11 +11,12 @@ const Chat = lazy(()=> import("./pages/Chat"))
 const Groups = lazy(()=> import("./pages/Groups"))
 const NotFound = lazy(()=> import("./pages/NotFound") )
 
-const user = true
+
 
 const App = () => {
+  const user = useSelector((store) => store.user)
   return (
-    <BrowserRouter>
+        <BrowserRouter>
       <Routes>
       <Route element={<Protected user={user} />}>
        {/* outlet */}
@@ -36,6 +38,7 @@ const App = () => {
       <Route path="*" element={<NotFound/>}></Route>
       </Routes>
     </BrowserRouter>
+   
   )
 }
 

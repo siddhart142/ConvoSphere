@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { ChatState } from '../Context/ChatProvider';
+
 import {Box} from "@chakra-ui/layout"
 import SideDrawer from '../Components/Shared/SideDrawer';
 import MyChats from '../Components/Shared/MyChats';
@@ -8,7 +8,7 @@ import ChatBox from '../Components/Shared/ChatBox';
 
 const Home = () => {
 
-  const {user} = ChatState();
+const user = true
   
 
 

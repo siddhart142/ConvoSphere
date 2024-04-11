@@ -8,7 +8,7 @@ const chatSchema = new Schema({
         {type: Schema.Types.ObjectId, ref: "User"}
     ],
     latestMsg: {type: Schema.Types.ObjectId, ref: "Message"},
-    groupAdmin: {ttype: Schema.Types.ObjectId, ref: "User"}
+    groupAdmin: {type: Schema.Types.ObjectId, ref: "User"}
 },{
     timestamps: true
 })

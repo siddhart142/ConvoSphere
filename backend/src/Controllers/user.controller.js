@@ -1,10 +1,25 @@
 import { User } from "../Models/user.model.js";
 import { ApiError } from "../utlis/ApiError.js";
 import { ApiResponse } from "../utlis/ApiResponse.js";
+import { uploadOnCloudinary } from "../utlis/Cloudinary.js";
 import { asyncHandler } from "../utlis/asyncHandler.js";
 
 const register = asyncHandler(async (req, res) => {
-    const { name, email, bio, password, pic } = req.body;
+    const { name, email, bio, password} = req.body;
+
+    // const avatarLocalPath = req.file?.path
+
+    // console.log(req.file)
+    // let avatar={}
+    // if(avatarLocalPath)
+    // {
+    //     avatar = await uploadOnCloudinary(avatarLocalPath)
+    // }
+
+    // console.log(avatar)
+    // if(!avatar.url){
+    //     throw new ApiError(400,"Problem while uploading in cloudinary")
+    // }
 
     if (!name || !email || !bio || !password) {
         throw new ApiError(400, "All Fields are required");
@@ -22,7 +37,7 @@ const register = asyncHandler(async (req, res) => {
             email,
             password,
             bio,
-            pic
+            // avatar: avatar.url ?? ""
         });
 
         const createdUser = await User.findOne({ email }).select("-password");
@@ -40,25 +55,35 @@ const register = asyncHandler(async (req, res) => {
 
 const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-
+    // console.log(email,password)
     if (!email.trim() || !password) {
         throw new ApiError(400, "All fields are required");
     }
 
     try {
-        const user = await User.findOne({ email }).select("+password");
+        const user = await User.findOne({ email })
 
         if (!user) {
             throw new ApiError(404, "No Such User Found");
         }
 
-        const isValidUser = await user.isPasswordCorrect(password);
+        console.log(user)
+        const isValidUser = await user.isPasswordCorrect(password)
 
         if (!isValidUser) {
             throw new ApiError(401, "Invalid user credentials");
         }
 
-        res.status(200).json(new ApiResponse(200, user, "Successfully Logged In"));
+        const accessToken = await user.generateAccessToken()
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+        }
+
+        res.status(200)
+        .cookie("accessToken",accessToken,options)
+        .json(new ApiResponse(200, user, "Successfully Logged In"));
     } catch (error) {
         console.error("Error during login:", error.message);
         throw new ApiError(401, error.message);

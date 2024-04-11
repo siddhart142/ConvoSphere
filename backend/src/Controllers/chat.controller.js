@@ -62,8 +62,9 @@ const accessChat = asyncHandler(async(req,res)=>{
 
 const fetchChats = asyncHandler(async(req,res)=>{
 
+    const userId = req.user._id
     try{
-        const chats = await Chat.find({users:{$elemMatch:{req.user._id}}})
+        const chats = await Chat.find({users:{$elemMatch:{userId}}})
         .populate("users","-password")
         .populate("groupAdmin","-password")
         .populate("latestMsg")
@@ -185,7 +186,7 @@ const removeFromGroup = asyncHandler(async(req,res)=>{
 })
 
 
-export {getChats,
+export {
         accessChat,
         fetchChats,
         createGroupChat,

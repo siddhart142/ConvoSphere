@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { ChatState } from '../Context/ChatProvider';
+
 import {Box} from "@chakra-ui/layout"
 
 const Chat = () => {
 
-  const {user} = ChatState();
+  
   
 
 
