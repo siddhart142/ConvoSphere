@@ -39,9 +39,12 @@ const SideDrawer = () => {
     const [searchResult, setSearchResult] = useState([])
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
+    const [selectedChat,setSelectedChat] = useState({})
     const toast = useToast()
     const user = useSelector((store) => store.user)
     const dispatch = useDispatch()
+
+
     const handleLogOut = ()=>{
         dispatch(resetUser())
     }
@@ -83,7 +86,31 @@ const SideDrawer = () => {
         setLoading(false)
     }
 
-    const accessChat = ({user_id})=>{
+    const accessChat = async(user_id) =>{
+        // console.log(user_id)
+        setLoadingChat(true)
+        try {
+            const response = await axios.post("http://localhost:8000/api/v1/chats", {"userId": user_id}, {
+                withCredentials: true
+              });
+    
+              setSelectedChat(response.data.data)
+              setLoadingChat(false)
+        } catch (error) {
+            toast({
+                title : "Error Fetching the Chat",
+                status : "error",
+                description : error.message,
+                duration : 5000,
+                isClosable : true,
+                position : "bottom-left",
+
+            })
+            
+        }
+        
+
+        // console.log(response)
 
     }
   return (

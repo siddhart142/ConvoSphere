@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 const protectedRoute = asyncHandler(async(req,res,next)=>{
 
     const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ","")
-
+    // console.log("t",req.cookies)
     if(!token){
         throw new ApiError(401,"Unauthorized Access")
     }

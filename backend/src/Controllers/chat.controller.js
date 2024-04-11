@@ -23,7 +23,7 @@ const accessChat = asyncHandler(async(req,res)=>{
         throw new ApiError(404,"UserId Not provided")
     }
 
-    const isChat = await Chat.find({
+    let isChat = await Chat.find({
         isGroupChat : false,
         $and : [
             {users: {$elemMatch : {$eq : req.user_id}}},

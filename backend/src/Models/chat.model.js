@@ -4,7 +4,7 @@ const chatSchema = new Schema({
 
     chatName : { type: String, trim: true},
     isGroupChat : {type: Boolean, default: false},
-    user: [
+    users: [
         {type: Schema.Types.ObjectId, ref: "User"}
     ],
     latestMsg: {type: Schema.Types.ObjectId, ref: "Message"},
