@@ -14,6 +14,7 @@ import {
     ModalCloseButton,
   } from '@chakra-ui/react'
 const ProfileModel = ({user, children}) => {
+  console.log(user)
     const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <div>
@@ -21,11 +22,11 @@ const ProfileModel = ({user, children}) => {
       <Modal isOpen={isOpen} onClose={onClose} >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader display={'flex'} justifyContent={'center'} fontSize={"40px"} fontFamily={'Work sans'}>user Name</ModalHeader>
+          <ModalHeader display={'flex'} justifyContent={'center'} fontSize={"40px"} fontFamily={'Work sans'}>{user?.name}</ModalHeader>
           <ModalCloseButton />
           <ModalBody display={'flex'} flexDirection={'column'} justifyContent={'space-between'} alignItems={'center'}>
             <Image borderRadius={'full'} boxSize={"150px"} src='https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png'/>
-            <Text fontSize={{base: "20px", md: "30px"}}>Email</Text>
+            <Text fontSize={{base: "20px", md: "30px"}}>{user.email}</Text>
           </ModalBody>
            
           <ModalFooter>

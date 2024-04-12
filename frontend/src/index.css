@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+::-webkit-scrollbar{
+    width: 0px;
+}
+
+::-webkit-scrollbar-thumb{
+    background: rgba(136,136,136,0.281);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+#root {
+    background: linear-gradient(to right, #3b82f6, #10b981);
+    margin: 0;
+    padding: 0;
+    width: 100vw; /* Ensure it takes the full width of the viewport */
+    height: 100vh; /* Ensure it takes the full height of the viewport */
+}

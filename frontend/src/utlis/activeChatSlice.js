@@ -2,9 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const activeChatSlice = createSlice({
     name : "activeChat",
-    initialState : {
-        
-    },
+    initialState : null,
     reducers : {
         setActive : (state,action) => {
             return action.payload

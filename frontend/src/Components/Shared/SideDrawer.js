@@ -97,10 +97,10 @@ const SideDrawer = () => {
             const response = await axios.post("http://localhost:8000/api/v1/chats", {"userId": user_id}, {
                 withCredentials: true
               });
-              console.log("c",response.data)
-              setSelectedChat(response.data)
+              console.log("c",response.data.data)
+              setSelectedChat(response.data.data)
               setLoadingChat(false)
-              if(!chatList.find((c)=> c._id==response.data.data._id)) dispatch(addChat([response.data,...chatList]))
+              if(!chatList.find((c)=> c._id==response.data.data._id)) dispatch(addChat([response.data.data,...chatList]))
 
         } catch (error) {
             toast({
@@ -148,7 +148,7 @@ const SideDrawer = () => {
                     <Avatar size='sm' cursor='pointer' name={user.name} src=""/>
                 </MenuButton>
                 <MenuList>
-                <ProfileModel>
+                <ProfileModel user={user}>
                     <MenuItem>My Profile</MenuItem>
                     <MenuDivider/>
                     <MenuItem onClick={handleLogOut}>Log Out</MenuItem>

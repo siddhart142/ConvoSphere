@@ -8,6 +8,7 @@ import { Box, Stack, Text } from "@chakra-ui/layout";
 import ChatLoading from '../layout/ChatLoading'
 import { setActive } from '../../utlis/activeChatSlice'
 import AddIcon from '@mui/icons-material/Add';
+import GroupChatModal from '../Shared/GroupChatModal'
 
 const MyChats = () => {
 
@@ -16,7 +17,7 @@ const MyChats = () => {
 
   const chatList = useSelector((store)=>store.chatList)
   const selectedChat = useSelector((store)=>store.activeChat)
-  console.log("sele",selectedChat)
+  // console.log("sele",selectedChat)
   const user = useSelector((store)=>store.user)
   console.log("chatListM",chatList)
   const dispatch = useDispatch()
@@ -52,7 +53,8 @@ const MyChats = () => {
   },[]);
 
   const getSender = (loggedUser,users)=>{
-    return users[0]._id=== loggedUser._id ? users[0].name : users[1].name
+    console.log("get",users)
+    return users[0]?._id=== loggedUser?._id ? users[1]?.name : users[0]?.name
   }
   return (
     <Box
@@ -77,13 +79,15 @@ const MyChats = () => {
         alignItems="center"
       >
         My Chats
-        <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
-          >
-            New Group Chat
-          </Button>
+        <GroupChatModal>
+          <Button
+              d="flex"
+              fontSize={{ base: "17px", md: "10px", lg: "17px" }}
+              rightIcon={<AddIcon />}
+            >
+              New Group Chat
+            </Button>
+        </GroupChatModal>
         </Box>
           <Box
           d="flex"

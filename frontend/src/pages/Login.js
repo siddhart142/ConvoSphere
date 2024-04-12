@@ -34,7 +34,7 @@ const Login = () => {
         try {
             const response = await axios.post("http://localhost:8000/api/v1/users/login", formData);
             console.log(response);
-            dispatch(addUser(response?.data?.data?.user))
+            dispatch(addUser(response?.data?.data?.loggedInUser))
             document.cookie =`accessToken= ${response?.data?.data?.accessToken}`
             navigate("/");
         } catch (error) {

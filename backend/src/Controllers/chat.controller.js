@@ -40,8 +40,13 @@ const accessChat = asyncHandler(async(req,res)=>{
     
     if(isChat.length > 0)
     {
-        res.send(isChat[0])
-        return
+        console.log("access")
+        return res.status(200)
+        .json(
+            new ApiResponse(200,isChat[0],"Successfully Fetched")
+        )
+        // (isChat[0])
+        // return
     }else{
         var chatData ={
             ChatName : "sender",
@@ -95,7 +100,7 @@ const fetchChats = asyncHandler(async(req,res)=>{
 
 const createGroupChat = asyncHandler(async(req,res)=>{
 
-    if(!req.body.users || !req.body.users){
+    if(!req.body.users || !req.user){
         return res.status(400).send({message: "Please fill all the fields"})
     }
 
@@ -118,8 +123,9 @@ const createGroupChat = asyncHandler(async(req,res)=>{
         .populate("users","-passowrd")
         .populate("groupAdmin","-password")
 
-        res.status(200)
-        .json(200,fullGroupChat,"chat created")
+        res.status(200).json(
+            new ApiResponse(200,fullGroupChat,"chat createed")
+        )
     }catch(error)
     {
         throw new ApiError(400,"failed to create groupchat")
