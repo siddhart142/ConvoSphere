@@ -14,7 +14,7 @@ import {
     ModalCloseButton,
   } from '@chakra-ui/react'
 const ProfileModel = ({user, children}) => {
-  console.log(user)
+  // console.log(user)
     const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <div>

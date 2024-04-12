@@ -45,13 +45,17 @@ const sendMessage = asyncHandler(async(req,res)=>{
 
 const allMessage = asyncHandler(async(req,res)=>{
 
+    
     const chatId = req.params.chatId
+    console.log("fetched called\n\n\n",chatId)
+
 
     try {
         const messages = await Message.find({chat : chatId})
         .populate("sender","name avatar email")
         .populate("chat")
 
+        console.log("hehe",messages)
         res.status(200)
         .json(
             new ApiResponse(200,messages,"fetched messages")
