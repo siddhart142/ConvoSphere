@@ -15,6 +15,7 @@ import {
 const UpdateGroupModel = () => {
 
     const activeGroup = useSelector((store)=>store.activeChat)
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
