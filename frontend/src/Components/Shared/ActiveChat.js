@@ -6,6 +6,7 @@ import { setActive } from '../../utlis/activeChatSlice';
 import ProfileModel from './profileModel';
 import UpdateGroupModel from './UpdateGroupModel';
 import axios from 'axios';
+import ScrollableChat from './ScrollableChat';
 
 const ActiveChat = () => {
     const user = useSelector((store)=>store.user)
@@ -14,7 +15,7 @@ const ActiveChat = () => {
     // console.log("ac",activeChat)
     const dispatch = useDispatch()
 
-    const [message,setMessage] = useState([])
+    const [message,setMessage] = useState(null)
     const [loading,setLoading] = useState(false)
     const [newMessage, setNewMessage] = useState()
     const getSenderName = (loggedUser,users)=>{
@@ -67,7 +68,7 @@ const ActiveChat = () => {
             const response = await axios.get(`http://localhost:8000/api/v1/messages/${activeChat._id}`,{
                 withCredentials: true
             })
-            // console.log("message",response)
+            console.log("message",response)
             
             setMessage(response.data.data)
             setLoading(false)
@@ -110,9 +111,9 @@ const ActiveChat = () => {
                 alignSelf="center"
                 margin="auto"
             /> : (
-                <div>
+                <div className=''>
 
-
+                  <ScrollableChat messages={message}/>
                 </div>
             )}
             <FormControl 
