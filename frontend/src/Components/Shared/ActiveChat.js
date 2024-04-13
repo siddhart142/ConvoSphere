@@ -7,7 +7,9 @@ import ProfileModel from './profileModel';
 import UpdateGroupModel from './UpdateGroupModel';
 import axios from 'axios';
 import ScrollableChat from './ScrollableChat';
-
+import io from "socket.io-client"
+const ENDPOINT = "http://localhost:8000";
+var socket, selectedChatCompare
 const ActiveChat = () => {
     const user = useSelector((store)=>store.user)
     const activeChat = useSelector((store)=>store.activeChat)
@@ -18,6 +20,7 @@ const ActiveChat = () => {
     const [message,setMessage] = useState(null)
     const [loading,setLoading] = useState(false)
     const [newMessage, setNewMessage] = useState()
+    const [socketConnected,setSocketConnected] = useState(false)
     const getSenderName = (loggedUser,users)=>{
         // console.log("get",users)
         return users[0]?._id=== loggedUser?._id ? users[1]?.name : users[0]?.name
@@ -28,8 +31,8 @@ const ActiveChat = () => {
       }
 
       const sendMessage= async(e)=>{
-        console.log("k",e.key)
-        console.log(newMessage)
+        // console.log("k",e.key)
+        // console.log(newMessage)
         if(e.key==="Enter" && newMessage)
         try {
             setNewMessage("")
@@ -40,7 +43,7 @@ const ActiveChat = () => {
                 withCredentials : true
             })
 
-     
+            socket.emit("new message",response?.data?.data)
             
             setMessage([...message,response.data.data])
             
@@ -72,6 +75,8 @@ const ActiveChat = () => {
             
             setMessage(response.data.data)
             setLoading(false)
+
+            socket.emit('join chat',activeChat._id)
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -84,9 +89,42 @@ const ActiveChat = () => {
         }
       }
 
-      useEffect(()=>{
-        fetchMessages()
-      },[activeChat])
+      useEffect(() => {
+        socket = io(ENDPOINT);
+        socket.emit('setup', user);
+    
+        socket.on('connect', () => {
+            setSocketConnected(true);
+        });
+    
+        return () => {
+            socket.disconnect();
+        };
+    },);
+    
+    useEffect(() => {
+        if (socketConnected && activeChat) {
+            fetchMessages();
+            selectedChatCompare = activeChat;
+        }
+    }, [ activeChat]);
+    
+    useEffect(() => {
+        if (socketConnected) {
+            socket.on('message received', (newMessageReceived) => {
+              console.log("client",selectedChatCompare,newMessageReceived)
+                if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived?.chat._id) {
+                   console.log('====================================');
+                   console.log("notififcato");
+                   console.log('====================================');
+                } else {
+                  // console.log("active chat",activeChat)
+                  setMessage([...message,newMessageReceived])
+                }
+            });
+        }
+    }, );
+    
   return (
     <>
    

@@ -29,15 +29,15 @@ const ScrollableChat = ({messages}) => {
 
 
   return (
-<div className='overflow-x-hidden overflow-y-auto h-[900px] px-4 '>
+<div className='overflow-x-hidden overflow-y-auto  h-[calc(100vh - 100px)] px-4  '>
     {messages && messages.map((message, i) => (
-        <div className={`flex ${message.sender._id === user._id ? 'justify-end' : 'justify-start'} mb-4`} key={message._id}>
+        <div className={`flex ${message.sender._id === user._id ? 'justify-end' : 'justify-start'} mb-2`} key={message._id}>
             {(isDiffSender(messages, message, i, user._id) && message.isGroupChat) &&
                 <Tooltip label={message.sender.name} placement='bottom-start' hasArrow>
                     <Avatar size="sm" cursor='pointer' name={message.sender.name} src={message.sender.avatar} />
                 </Tooltip>
             }
-            <span className={`flex-shrink-0 ${message.sender._id === user._id ? 'bg-blue-200' : 'bg-green-300 text-gray-800'} ${!message.isGroupChat ? "ml-2" : isDiffSender(messages, message, i, user._id) && message.isGroupChat ? 'ml-2' : 'ml-10'} py-2 px-3 rounded-lg max-w-[75%]`}>{message.content}</span>
+            <span className={`flex-shrink-0 ${message.sender._id === user._id ? 'bg-blue-200' : 'bg-green-300 text-gray-800'} ${!message.isGroupChat ? "ml-2" : isDiffSender(messages, message, i, user._id) && message.isGroupChat ? 'ml-2' : 'ml-10'} py-2 px-3 rounded-lg max-w-[75%] `}>{message.content}</span>
         </div>
     ))}
 </div>

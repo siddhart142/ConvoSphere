@@ -10,7 +10,7 @@ const app = express()
 
 
 app.use(cors({
-    origin : "http://localhost:3000",
+    origin : "http://localhost:3001",
     credentials : true
 }))
 
@@ -31,4 +31,5 @@ app.use("/api/v1/users",UserRouter)
 
 import MessageRouter from "./Routes/message.route.js"
 app.use("/api/v1/messages",MessageRouter)
+
 export default app
