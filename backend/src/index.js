@@ -12,7 +12,7 @@ const httpServer = createServer(app);
 const io = new Server(httpServer,{ 
     pingTimeout: 60000,
     cors: {
-        origin: "http://localhost:3001",
+        origin: "http://localhost:3000",
     },
  });
 connectDB()
@@ -48,4 +48,15 @@ io.on("connection", (socket) => {
         }
     })
   })
+  socket.on("typing", (room) => {
+    console.log(`User in room ${room} is typing`);
+    socket.in(room).emit("typing");
+  });
+  
+  socket.on("stop typing", (room) => {
+    console.log(`User in room ${room} stopped typing`);
+    socket.in(room).emit("stop typing");
+  });
+  
+
 });
