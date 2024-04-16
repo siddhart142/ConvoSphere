@@ -39,6 +39,16 @@ io.on("connection", (socket) => {
     console.log("user join room",room)
   })
 
+  socket.on("typing", (room) => {
+    console.log(`User in room ${room} is typing`);
+    socket.in(room).emit("typing");
+  });
+  
+  socket.on("stop typing", (room) => {
+    console.log(`User in room ${room} stopped typing`);
+    socket.in(room).emit("stop typing");
+  });
+
   socket.on('new message',(newMessageReceived)=>{
     
     if(!newMessageReceived.chat.users)  console.log("user not defined")
@@ -48,14 +58,9 @@ io.on("connection", (socket) => {
         }
     })
   })
-  socket.on("typing", (room) => {
-    console.log(`User in room ${room} is typing`);
-    socket.in(room).emit("typing");
-  });
-  
-  socket.on("stop typing", (room) => {
-    console.log(`User in room ${room} stopped typing`);
-    socket.in(room).emit("stop typing");
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
   });
   
 

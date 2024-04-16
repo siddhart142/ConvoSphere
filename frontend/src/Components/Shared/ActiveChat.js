@@ -10,6 +10,7 @@ import ScrollableChat from './ScrollableChat';
 import io from "socket.io-client"
 import Lottie from "react-lottie"
 import animationData from "../animations/typing.json"
+import { addNotification } from '../../utlis/notificationSlice';
 const ENDPOINT = "http://localhost:8000";
 var socket, selectedChatCompare
 const ActiveChat = () => {
@@ -26,6 +27,10 @@ const ActiveChat = () => {
 
     const [typing, setTyping] = useState(false)
     const [isTyping , setIsTyping] = useState(false)
+
+    const notification = useSelector((store)=>store.notification)
+
+    console.log("------",notification)
 
     const defaultOptions = {
       loop: true,
@@ -163,9 +168,10 @@ const ActiveChat = () => {
             socket.on('message received', (newMessageReceived) => {
               console.log("client",selectedChatCompare,newMessageReceived)
                 if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived?.chat._id) {
-                   console.log('====================================');
-                   console.log("notififcato");
-                   console.log('====================================');
+                   if(!notification.includes(newMessageReceived)){
+                      dispatch(addNotification([newMessageReceived,...notification]))
+                      // update chatList
+                   }
                 } else {
                   // console.log("active chat",activeChat)
                   setMessage([...message,newMessageReceived])

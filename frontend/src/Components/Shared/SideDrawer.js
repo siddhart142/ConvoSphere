@@ -33,6 +33,8 @@ import axios from "axios"
 import ChatLoading from '../layout/ChatLoading';
 import UserListItem from '../layout/UserListItem';
 import { addChat } from '../../utlis/chatLIstSlice';
+import { setActive } from '../../utlis/activeChatSlice';
+import { addNotification } from '../../utlis/notificationSlice';
 const SideDrawer = () => {
 
     
@@ -42,8 +44,10 @@ const SideDrawer = () => {
     const [loading, setLoading] = useState(false)
     const [loadingChat, setLoadingChat] = useState(false)
     const [selectedChat,setSelectedChat] = useState({})
+    const notification = useSelector((store)=>store.notification)
     const chatList = useSelector((store)=>store.chatList)
 
+    console.log("notifcation side",notification)
     const toast = useToast()
     const user = useSelector((store) => store.user)
     const dispatch = useDispatch()
@@ -52,6 +56,11 @@ const SideDrawer = () => {
     const handleLogOut = ()=>{
         dispatch(resetUser())
     }
+
+    const getSender = (loggedUser,users)=>{
+        // console.log("get",users)
+        return users[0]?._id=== loggedUser?._id ? users[1].name : users[0].name
+      }
 
     const handleSearch = async ()=>{
         if(!search){
@@ -139,8 +148,19 @@ const SideDrawer = () => {
                 <MenuButton p='1'>
                     <NotificationsIcon className='text-2xl m-1' />
                 </MenuButton>
-                <MenuList>
-                    
+                <MenuList className='p-2'>
+                {!notification.length ? "No new Notification" : 
+    notification.map((noti) => (
+        <MenuItem onClick={() => {
+    dispatch(setActive(noti.chat));
+    // dispatch(addNotification(notification.filter(n => n !== noti)));
+}} className='p-4' key={noti._id}>
+    {noti.chat.isGroupChat ? `New message in ${noti.chat.chatName}` : `New Message from ${getSender(user, noti.chat.users)}`}
+</MenuItem>
+
+    ))
+}
+
                 </MenuList>
             </Menu>
             <Menu>
